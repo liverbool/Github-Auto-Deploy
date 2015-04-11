@@ -113,6 +113,8 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
 def main():
     try:
         server = None
+        pid_file = GitAutoDeploy.CONFIG_PID_FILE
+        
         for arg in sys.argv: 
             if(arg == '-d' or arg == '--daemon-mode'):
                 GitAutoDeploy.daemon = True
@@ -129,8 +131,6 @@ def main():
             
             if(not server is None):
             	server.socket.close()
-
-            pid_file = GitAutoDeploy.CONFIG_PID_FILE
 
 	    if (os.path.exists(pid_file)):
 	        call(['kill ' + open(pid_file, 'r').read()], shell=True)
