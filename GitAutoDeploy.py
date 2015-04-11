@@ -152,7 +152,7 @@ def main():
             	if (_pid):
                     os.kill(_pid, 0)
                     
-                    if (not GitAutoDeploy.silence)
+                    if (not GitAutoDeploy.silence):
                         print 'Process is running...'
                     
                     return
@@ -166,7 +166,7 @@ def main():
             os.setsid()
 
         if(not GitAutoDeploy.quiet):
-        	if (not GitAutoDeploy.silence)
+        	if (not GitAutoDeploy.silence):
                     print 'Github Autodeploy Service v0.2 started'
         else:
             print 'Github Autodeploy Service v 0.2 started at PID %s in daemon mode' % (os.getpid())
