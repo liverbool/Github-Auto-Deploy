@@ -5,8 +5,9 @@ from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 from subprocess import call
 
 class GitAutoDeploy(BaseHTTPRequestHandler):
-
-    CONFIG_FILEPATH = './GitAutoDeploy.conf.json'
+    cdir = os.path.dirname(os.path.realpath(__file__))
+    CONFIG_FILEPATH = cdir + '/GitAutoDeploy.conf.json'
+    CONFIG_PID_FILE = cdir+ '/.pid'
     config = None
     quiet = False
     daemon = False
@@ -74,7 +75,7 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
         if(not self.quiet):
             print "\nPost push request received"
             print 'Updating ' + path
-        call(['cd "' + path + '" && git fetch'], shell=True)
+        call(['cd "' + path + '" && git fetch'], shell=True, stdout=sys.stdout, stderr=sys.stderr)
 
     def deploy(self, path):
         config = self.getConfig()
@@ -88,7 +89,7 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
                     if branch is None or branch == self.branch:
                         if(not self.quiet):
                             print 'Executing deploy command'
-                        call(['cd "' + path + '" && ' + repository['deploy']], shell=True)
+                        call(['cd "' + path + '" && ' + repository['deploy']], shell=True, stdout=sys.stdout, stderr=sys.stderr)
                         
                     elif not self.quiet:
                         print 'Push to different branch (%s != %s), not deploying' % (branch, self.branch)
@@ -113,7 +114,11 @@ def main():
         if(not GitAutoDeploy.quiet):
             print 'Github Autodeploy Service v0.2 started'
         else:
-            print 'Github Autodeploy Service v 0.2 started in daemon mode'
+            print 'Github Autodeploy Service v 0.2 started at PID %s in daemon mode' % (os.getpid())
+	    pid_file = open(GitAutoDeploy.CONFIG_PID_FILE, 'w')
+            pid_file.truncate()
+            pid_file.write(str(os.getpid()))
+            pid_file.close()
              
         server = HTTPServer(('', GitAutoDeploy.getConfig()['port']), GitAutoDeploy)
         server.serve_forever()
