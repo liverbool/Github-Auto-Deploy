@@ -87,10 +87,16 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
                     if 'branch' in repository:
                         branch = repository['branch']
 
+		    print 'Branch: ' + str(branch)
+		    print 'self.Branch: ' + str(self.branch)
+		    cmd = 'cd "' + path + '" && ' + repository['deploy']
+		    
                     if branch is None or branch == self.branch:
                         if(not self.quiet):
                             print 'Executing deploy command'
-                        call(['cd "' + path + '" && ' + repository['deploy']], shell=True, stdout=sys.stdout, stderr=sys.stderr)
+                        
+                        print cmd
+                        call([cmd], shell=True, stdout=sys.stdout, stderr=sys.stderr)
                         
                     elif not self.quiet:
                         print 'Push to different branch (%s != %s), not deploying' % (branch, self.branch)
