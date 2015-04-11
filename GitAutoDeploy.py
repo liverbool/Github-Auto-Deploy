@@ -111,6 +111,8 @@ def main():
             	GitAutoDeploy.stop = True
                 
         if (GitAutoDeploy.stop):
+            print 'Stoping ...'
+            
             if(not server is None):
             	server.socket.close()
             	
