@@ -47,6 +47,9 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
 
         urls = self.parseRequest()
         for url in urls:
+            if not self.quiet:
+            	print 'Matching url: ' + url
+            	
             paths = self.getMatchingPaths(url)
             for path in paths:
                 self.fetch(path)
@@ -94,8 +97,8 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
                     if branch is None or branch == self.branch:
                         if(not self.quiet):
                             print 'Executing deploy command'
-                        
-                        print cmd
+                            print cmd
+                            
                         call([cmd], shell=True, stdout=sys.stdout, stderr=sys.stderr)
                         
                     elif not self.quiet:
