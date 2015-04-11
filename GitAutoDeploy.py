@@ -138,6 +138,16 @@ def main():
 
             sys.exit('Goodbye')
             return
+        
+        # check process file exist with no real process (stoped with other)
+        # remove it
+        if (os.path.exists(pid_file)):
+            try:
+                os.kill(open(pid_file, 'r').read(), 0)
+                print 'Process is running...'
+                return
+            except (OSError) as ex:
+            	os.remove(pid_file)
         	
         if(GitAutoDeploy.daemon):
             pid = os.fork()
