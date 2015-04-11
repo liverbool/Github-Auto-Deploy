@@ -11,6 +11,7 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
     config = None
     quiet = False
     daemon = False
+    stop = False
 
     @classmethod
     def getConfig(myClass):
@@ -102,9 +103,26 @@ def main():
             if(arg == '-d' or arg == '--daemon-mode'):
                 GitAutoDeploy.daemon = True
                 GitAutoDeploy.quiet = True
+                
             if(arg == '-q' or arg == '--quiet'):
                 GitAutoDeploy.quiet = True
                 
+            if(arg == '--stop'):
+            	GitAutoDeploy.stop = True
+                
+        if (GitAutoDeploy.stop):
+            if(not server is None):
+            	server.socket.close()
+            	
+            pid_file = open(GitAutoDeploy.CONFIG_PID_FILE, 'r')
+            
+            call('kill ' + str(pid_file.read()))
+            
+            pid_file.truncate()
+            pid_file.close()
+            print 'Goodbye'
+            sys.exit()
+        	
         if(GitAutoDeploy.daemon):
             pid = os.fork()
             if(pid != 0):
