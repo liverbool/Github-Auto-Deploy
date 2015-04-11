@@ -104,7 +104,7 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
                             print cmd
                             call([cmd], shell=True, stdout=sys.stdout, stderr=sys.stderr)
                         else:
-                            call([cmd], shell=True, stdout=sys.stdout, stderr=sys.stderr)
+                            call([cmd], shell=True)
                         
                     elif not self.quiet:
                         print 'Push to different branch (%s != %s), not deploying' % (branch, self.branch)
