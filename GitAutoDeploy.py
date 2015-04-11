@@ -116,7 +116,7 @@ def main():
             if(not server is None):
             	server.socket.close()
             	
-            pid_file = open(GitAutoDeploy.CONFIG_PID_FILE, 'r')
+            pid_file = open(GitAutoDeploy.CONFIG_PID_FILE, 'rw')
             
             call('kill ' + str(pid_file.read()))
             
