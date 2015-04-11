@@ -7,7 +7,7 @@ from subprocess import call
 class GitAutoDeploy(BaseHTTPRequestHandler):
     cdir = os.path.dirname(os.path.realpath(__file__))
     CONFIG_FILEPATH = cdir + '/GitAutoDeploy.conf.json'
-    CONFIG_PID_FILE = cdir+ '/.pid'
+    CONFIG_PID_FILE = cdir + '/.pid'
     config = None
     quiet = False
     daemon = False
@@ -115,15 +115,15 @@ def main():
             
             if(not server is None):
             	server.socket.close()
-            	
-            pid_file = open(GitAutoDeploy.CONFIG_PID_FILE, 'rw')
-            
-            call('kill ' + str(pid_file.read()))
-            
-            pid_file.truncate()
-            pid_file.close()
-            print 'Goodbye'
-            sys.exit()
+
+            pid_file = GitAutoDeploy.CONFIG_PID_FILE
+
+	    if (os.path.exists(pid_file)):
+	        call(['kill ' + open(pid_file, 'r').read()], shell=True)
+                os.remove(pid_file)
+
+            sys.exit('Goodbye')
+            return
         	
         if(GitAutoDeploy.daemon):
             pid = os.fork()
