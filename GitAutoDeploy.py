@@ -143,9 +143,11 @@ def main():
         # remove it
         if (os.path.exists(pid_file)):
             try:
-                os.kill(open(pid_file, 'r').read(), 0)
-                print 'Process is running...'
-                return
+            	_pid = int(open(pid_file, 'r').read())
+            	if (_pid):
+                    os.kill(_pid, 0)
+                    print 'Process is running...'
+                    return
             except (OSError) as ex:
             	os.remove(pid_file)
         	
