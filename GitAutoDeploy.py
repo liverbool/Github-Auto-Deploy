@@ -89,9 +89,11 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
                     branch = None
                     if 'branch' in repository:
                         branch = repository['branch']
-
-		    print 'Branch: ' + str(branch)
-		    print 'self.Branch: ' + str(self.branch)
+		    
+		    if(not self.quiet):
+		        print 'Branch: ' + str(branch)
+		        print 'self.Branch: ' + str(self.branch)
+		        
 		    cmd = 'cd "' + path + '" && ' + repository['deploy']
 		    
                     if branch is None or branch == self.branch:
