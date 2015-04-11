@@ -154,7 +154,8 @@ def main():
                     
                     if (not GitAutoDeploy.silence):
                         print 'Process is running...'
-                    
+                        
+                    sys.exit()
                     return
             except (OSError) as ex:
             	os.remove(pid_file)
