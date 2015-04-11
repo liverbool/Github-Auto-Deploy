@@ -79,7 +79,9 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
         if(not self.quiet):
             print "\nPost push request received"
             print 'Updating ' + path
-        call(['cd "' + path + '" && git fetch'], shell=True, stdout=sys.stdout, stderr=sys.stderr)
+            call(['cd "' + path + '" && git fetch'], shell=True, stdout=sys.stdout, stderr=sys.stderr)
+        else:
+            call(['cd "' + path + '" && git fetch'], shell=True)
 
     def deploy(self, path):
         config = self.getConfig()
@@ -100,8 +102,9 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
                         if(not self.quiet):
                             print 'Executing deploy command'
                             print cmd
-                            
-                        call([cmd], shell=True, stdout=sys.stdout, stderr=sys.stderr)
+                            call([cmd], shell=True, stdout=sys.stdout, stderr=sys.stderr)
+                        else:
+                            call([cmd], shell=True, stdout=sys.stdout, stderr=sys.stderr)
                         
                     elif not self.quiet:
                         print 'Push to different branch (%s != %s), not deploying' % (branch, self.branch)
