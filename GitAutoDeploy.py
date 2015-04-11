@@ -12,6 +12,7 @@ class GitAutoDeploy(BaseHTTPRequestHandler):
     quiet = False
     daemon = False
     stop = False
+    silence = False
 
     @classmethod
     def getConfig(myClass):
@@ -123,6 +124,10 @@ def main():
             if(arg == '-q' or arg == '--quiet'):
                 GitAutoDeploy.quiet = True
                 
+            if(arg == '-s' or arg == '--silence'):
+                GitAutoDeploy.silence = True
+                GitAutoDeploy.quiet = True
+                
             if(arg == '--stop'):
             	GitAutoDeploy.stop = True
                 
@@ -146,7 +151,10 @@ def main():
             	_pid = int(open(pid_file, 'r').read())
             	if (_pid):
                     os.kill(_pid, 0)
-                    print 'Process is running...'
+                    
+                    if (not GitAutoDeploy.silence)
+                        print 'Process is running...'
+                    
                     return
             except (OSError) as ex:
             	os.remove(pid_file)
@@ -158,7 +166,8 @@ def main():
             os.setsid()
 
         if(not GitAutoDeploy.quiet):
-            print 'Github Autodeploy Service v0.2 started'
+        	if (not GitAutoDeploy.silence)
+                    print 'Github Autodeploy Service v0.2 started'
         else:
             print 'Github Autodeploy Service v 0.2 started at PID %s in daemon mode' % (os.getpid())
 	    pid_file = open(GitAutoDeploy.CONFIG_PID_FILE, 'w')
